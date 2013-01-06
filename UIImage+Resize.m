@@ -19,7 +19,7 @@
     return [self drawImageInBounds: CGRectMake(0, 0, width, round(original_height * ratio))];
 }
 
-- (UIImage *) resizedImageByHeight:  (NSUInteger) width
+- (UIImage *) resizedImageByHeight:  (NSUInteger) height
 {
     CGImageRef imgRef = [self CGImage];
     CGFloat original_width  = CGImageGetWidth(imgRef);
@@ -49,9 +49,6 @@
     CGFloat scale_ratio = width_ratio < height_ratio ? width_ratio : height_ratio;
     return [self drawImageInBounds: CGRectMake(0, 0, round(original_width * scale_ratio), round(original_height * scale_ratio))];
 }
-
-
-@private
 
 - (UIImage *) drawImageInBounds: (CGRect) bounds
 {
