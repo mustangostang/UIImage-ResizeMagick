@@ -56,10 +56,34 @@
                                                           [[widthAndHeight objectAtIndex: 1] longLongValue])];
 }
 
+- (CGImageRef) CGImageWithCorrectOrientation
+{
+    if (self.imageOrientation == UIImageOrientationDown) {
+        return [self CGImage];
+    }
+    UIGraphicsBeginImageContext(self.size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    if (self.imageOrientation == UIImageOrientationRight) {
+        CGContextRotateCTM (context, 90 * M_PI/180);
+    } else if (self.imageOrientation == UIImageOrientationLeft) {
+        CGContextRotateCTM (context, -90 * M_PI/180);
+    } else if (self.imageOrientation == UIImageOrientationUp) {
+        CGContextRotateCTM (context, 180 * M_PI/180);
+    }
+    
+    [self drawAtPoint:CGPointMake(0, 0)];
+    
+    CGImageRef cgImage = CGBitmapContextCreateImage(context);
+    CGContextRelease(context);
+    return cgImage;
+}
+
 
 - (UIImage *) resizedImageByWidth:  (NSUInteger) width
 {
-    CGImageRef imgRef = [self CGImage];
+    CGImageRef imgRef = [self CGImageWithCorrectOrientation];
     CGFloat original_width  = CGImageGetWidth(imgRef);
     CGFloat original_height = CGImageGetHeight(imgRef);
     CGFloat ratio = width/original_width;    
@@ -68,7 +92,7 @@
 
 - (UIImage *) resizedImageByHeight:  (NSUInteger) height
 {
-    CGImageRef imgRef = [self CGImage];
+    CGImageRef imgRef = [self CGImageWithCorrectOrientation];
     CGFloat original_width  = CGImageGetWidth(imgRef);
     CGFloat original_height = CGImageGetHeight(imgRef);
     CGFloat ratio = height/original_height;
@@ -77,7 +101,7 @@
 
 - (UIImage *) resizedImageWithMinimumSize: (CGSize) size
 {
-    CGImageRef imgRef = [self CGImage];
+    CGImageRef imgRef = [self CGImageWithCorrectOrientation];
     CGFloat original_width  = CGImageGetWidth(imgRef);
     CGFloat original_height = CGImageGetHeight(imgRef);
     CGFloat width_ratio = size.width / original_width;
@@ -88,7 +112,7 @@
 
 - (UIImage *) resizedImageWithMaximumSize: (CGSize) size
 {
-    CGImageRef imgRef = [self CGImage];
+    CGImageRef imgRef = [self CGImageWithCorrectOrientation];
     CGFloat original_width  = CGImageGetWidth(imgRef);
     CGFloat original_height = CGImageGetHeight(imgRef);
     CGFloat width_ratio = size.width / original_width;
@@ -110,22 +134,12 @@
     
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    // translated rectangle for drawing sub image
     CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
-    
-    // clip to the bounds of the image context
-    // not strictly necessary as it will get clipped anyway?
     CGContextClipToRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
-    
-    // draw image
     [self drawInRect:drawRect];
-    
-    // grab image
     UIImage* subImage = UIGraphicsGetImageFromCurrentImageContext();
-    
     UIGraphicsEndImageContext();
-    
+    CGContextRelease (context);
     return subImage;
 }
 
