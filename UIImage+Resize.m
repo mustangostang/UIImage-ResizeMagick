@@ -10,6 +10,53 @@
 
 @implementation UIImage (Resize)
 
+// width	Width given, height automagically selected to preserve aspect ratio.
+// xheight	Height given, width automagically selected to preserve aspect ratio.
+// widthxheight	Maximum values of height and width given, aspect ratio preserved.
+// widthxheight^	Minimum values of width and height given, aspect ratio preserved.
+// widthxheight!	Exact dimensions, no aspect ratio preserved.
+// widthxheight#	Crop to this exact dimensions.
+
+- (UIImage *) resizedImageByMagick: (NSString *) spec
+{
+    
+    if([spec hasSuffix:@"!"]) {
+        NSString *specWithoutSuffix = [spec substringToIndex: [spec length] - 1];
+        NSArray *widthAndHeight = [specWithoutSuffix componentsSeparatedByString: @"x"];
+        NSUInteger width = [[widthAndHeight objectAtIndex: 0] longLongValue];
+        NSUInteger height = [[widthAndHeight objectAtIndex: 1] longLongValue];
+        UIImage *newImage = [self resizedImageWithMinimumSize: CGSizeMake (width, height)];
+        return [newImage drawImageInBounds: CGRectMake (0, 0, width, height)];
+    }
+    
+    if([spec hasSuffix:@"#"]) {
+        NSString *specWithoutSuffix = [spec substringToIndex: [spec length] - 1];
+        NSArray *widthAndHeight = [specWithoutSuffix componentsSeparatedByString: @"x"];
+        NSUInteger width = [[widthAndHeight objectAtIndex: 0] longLongValue];
+        NSUInteger height = [[widthAndHeight objectAtIndex: 1] longLongValue];
+        UIImage *newImage = [self resizedImageWithMinimumSize: CGSizeMake (width, height)];
+        return [newImage croppedImageWithRect: CGRectMake ((newImage.size.width - width) / 2, (newImage.size.height - height) / 2, width, height)];
+    }
+    
+    if([spec hasSuffix:@"^"]) {
+        NSString *specWithoutSuffix = [spec substringToIndex: [spec length] - 1];
+        NSArray *widthAndHeight = [specWithoutSuffix componentsSeparatedByString: @"x"];
+        return [self resizedImageWithMinimumSize: CGSizeMake ([[widthAndHeight objectAtIndex: 0] longLongValue],
+                                                              [[widthAndHeight objectAtIndex: 1] longLongValue])];
+    }
+    
+    NSArray *widthAndHeight = [spec componentsSeparatedByString: @"x"];
+    if ([widthAndHeight count] == 1) {
+        return [self resizedImageByWidth: [spec longLongValue]];
+    }
+    if ([[widthAndHeight objectAtIndex: 0] isEqualToString: @""]) {
+        return [self resizedImageByHeight: [[widthAndHeight objectAtIndex: 1] longLongValue]];
+    }
+    return [self resizedImageWithMaximumSize: CGSizeMake ([[widthAndHeight objectAtIndex: 0] longLongValue],
+                                                          [[widthAndHeight objectAtIndex: 1] longLongValue])];
+}
+
+
 - (UIImage *) resizedImageByWidth:  (NSUInteger) width
 {
     CGImageRef imgRef = [self CGImage];
@@ -57,6 +104,29 @@
     UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return resizedImage;
+}
+
+- (UIImage*) croppedImageWithRect: (CGRect) rect {
+    
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // translated rectangle for drawing sub image
+    CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
+    
+    // clip to the bounds of the image context
+    // not strictly necessary as it will get clipped anyway?
+    CGContextClipToRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
+    
+    // draw image
+    [self drawInRect:drawRect];
+    
+    // grab image
+    UIImage* subImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return subImage;
 }
 
 
