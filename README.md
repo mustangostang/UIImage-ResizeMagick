@@ -14,7 +14,7 @@ where **spec** could be one of the following expressions (follows ImageMagick sy
 - [width]x[height] -- maximum values of height and width given, aspect ratio preserved.
 - [width]x[height]^ -- minimum values of height and width given, aspect ratio preserved.
 - [width]x[height]! -- width and height emphatically given, original aspect ratio ignored.
-- [width]x[height]# -- scale and crop to exactly that size, original aspect ratio preserved (*you probably want this one for your thumnails*).
+- [width]x[height]# -- scale and crop to exactly that size, original aspect ratio preserved (you probably want this one for your thumbnails).
 
 Example:
 
