@@ -27,7 +27,7 @@ Caveat
 
 There is some support for orientations (not mirrored still). There is no support for scale (do we need it?), so please define pixel values.
 
-The project uses ARC, so please use -fobjc-arc if your project is not using ARC.
+The project uses ARC, so please compile UIImage-Resize.m with ```-fobjc-arc``` if your project is not using ARC.
 
 Additional methods:
 -------------------
