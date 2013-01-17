@@ -27,7 +27,7 @@ Caveat
 
 There is some support for orientations (not mirrored still). There is no support for scale (do we need it?), so please define pixel values.
 
-The project uses ARC, so please compile UIImage-Resize.m with ```-fobjc-arc``` if your project is not using ARC.
+The project uses ARC, so you should compile UIImage-Resize.m with ```-fobjc-arc``` if your project is not using ARC.
 
 Additional methods:
 -------------------
@@ -40,4 +40,3 @@ If you need some resizing with data known on-the-fly, this category defines the 
   - (UIImage *) resizedImageWithMaximumSize: (CGSize) size;
   - (UIImage *) resizedImageWithMinimumSize: (CGSize) size;
 ```
-Support for imageOrientation/EXIF orientation will be added in future versions.
