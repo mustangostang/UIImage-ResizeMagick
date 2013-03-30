@@ -76,7 +76,8 @@
     [self drawAtPoint:CGPointMake(0, 0)];
     
     CGImageRef cgImage = CGBitmapContextCreateImage(context);
-    CGContextRelease(context);
+    UIGraphicsEndImageContext();
+
     return cgImage;
 }
 
@@ -139,7 +140,7 @@
     [self drawInRect:drawRect];
     UIImage* subImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    CGContextRelease (context);
+
     return subImage;
 }
 
