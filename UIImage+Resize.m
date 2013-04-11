@@ -59,6 +59,8 @@
 - (CGImageRef) CGImageWithCorrectOrientation
 {
     if (self.imageOrientation == UIImageOrientationDown) {
+        //retaining because caller expects to own the reference
+        CGImageRetain([self CGImage]);
         return [self CGImage];
     }
     UIGraphicsBeginImageContext(self.size);
