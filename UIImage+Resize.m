@@ -1,6 +1,6 @@
 //
 //  UIImage+Resize.m
-//  
+//
 //
 //  Created by Vlad Andersen on 1/5/13.
 //
@@ -63,8 +63,15 @@
         CGImageRetain([self CGImage]);
         return [self CGImage];
     }
-    UIGraphicsBeginImageContext(self.size);
-    
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        if ([[UIScreen mainScreen] scale] == 2.0) {
+            UIGraphicsBeginImageContextWithOptions(self.size, YES, 2.0);
+        } else {
+            UIGraphicsBeginImageContext(self.size);
+        }
+    } else {
+        UIGraphicsBeginImageContext(self.size);
+    }
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     if (self.imageOrientation == UIImageOrientationRight) {
@@ -79,7 +86,7 @@
     
     CGImageRef cgImage = CGBitmapContextCreateImage(context);
     UIGraphicsEndImageContext();
-
+    
     return cgImage;
 }
 
@@ -130,7 +137,15 @@
 
 - (UIImage *) drawImageInBounds: (CGRect) bounds
 {
-    UIGraphicsBeginImageContext(bounds.size);
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        if ([[UIScreen mainScreen] scale] == 2.0) {
+            UIGraphicsBeginImageContextWithOptions(bounds.size, YES, 2.0);
+        } else {
+            UIGraphicsBeginImageContext(bounds.size);
+        }
+    } else {
+        UIGraphicsBeginImageContext(bounds.size);
+    }
     [self drawInRect: bounds];
     UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -139,14 +154,22 @@
 
 - (UIImage*) croppedImageWithRect: (CGRect) rect {
     
-    UIGraphicsBeginImageContext(rect.size);
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        if ([[UIScreen mainScreen] scale] == 2.0) {
+            UIGraphicsBeginImageContextWithOptions(rect.size, YES, 2.0);
+        } else {
+            UIGraphicsBeginImageContext(rect.size);
+        }
+    } else {
+        UIGraphicsBeginImageContext(rect.size);
+    }
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
     CGContextClipToRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
     [self drawInRect:drawRect];
     UIImage* subImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
+    
     return subImage;
 }
 
