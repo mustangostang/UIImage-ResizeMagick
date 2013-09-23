@@ -59,6 +59,8 @@
 - (CGImageRef) CGImageWithCorrectOrientation
 {
     if (self.imageOrientation == UIImageOrientationDown) {
+        //retaining because caller expects to own the reference
+        CGImageRetain([self CGImage]);
         return [self CGImage];
     }
     UIGraphicsBeginImageContext(self.size);
@@ -76,7 +78,8 @@
     [self drawAtPoint:CGPointMake(0, 0)];
 
     CGImageRef cgImage = CGBitmapContextCreateImage(context);
-    CGContextRelease(context);
+    UIGraphicsEndImageContext();
+
     return cgImage;
 }
 
@@ -87,6 +90,7 @@
     CGFloat original_width  = CGImageGetWidth(imgRef);
     CGFloat original_height = CGImageGetHeight(imgRef);
     CGFloat ratio = width/original_width;
+    CGImageRelease(imgRef);
     return [self drawImageInBounds: CGRectMake(0, 0, width, round(original_height * ratio))];
 }
 
@@ -96,6 +100,7 @@
     CGFloat original_width  = CGImageGetWidth(imgRef);
     CGFloat original_height = CGImageGetHeight(imgRef);
     CGFloat ratio = height/original_height;
+    CGImageRelease(imgRef);
     return [self drawImageInBounds: CGRectMake(0, 0, round(original_width * ratio), height)];
 }
 
@@ -107,6 +112,7 @@
     CGFloat width_ratio = size.width / original_width;
     CGFloat height_ratio = size.height / original_height;
     CGFloat scale_ratio = width_ratio > height_ratio ? width_ratio : height_ratio;
+    CGImageRelease(imgRef);
     return [self drawImageInBounds: CGRectMake(0, 0, round(original_width * scale_ratio), round(original_height * scale_ratio))];
 }
 
@@ -118,6 +124,7 @@
     CGFloat width_ratio = size.width / original_width;
     CGFloat height_ratio = size.height / original_height;
     CGFloat scale_ratio = width_ratio < height_ratio ? width_ratio : height_ratio;
+    CGImageRelease(imgRef);
     return [self drawImageInBounds: CGRectMake(0, 0, round(original_width * scale_ratio), round(original_height * scale_ratio))];
 }
 
@@ -139,7 +146,7 @@
     [self drawInRect:drawRect];
     UIImage* subImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    CGContextRelease (context);
+
     return subImage;
 }
 

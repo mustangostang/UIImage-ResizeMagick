@@ -19,7 +19,7 @@ where **spec** could be one of the following expressions (follows ImageMagick sy
 Example:
 
 ```objective-c
-  UIImage resizedImage = [image resizedImageByMagick: @"320x320#"];
+  UIImage* resizedImage = [image resizedImageByMagick: @"320x320#"];
 ```
 
 Caveat
