@@ -1,6 +1,6 @@
 //
-//  UIImage+Resize.h
-//  
+//  UIImage+ResizeMagick.h
+//
 //
 //  Created by Vlad Andersen on 1/5/13.
 //
@@ -8,7 +8,7 @@
 
 
 
-@interface UIImage (Resize)
+@interface UIImage (ResizeMagick)
 
 - (UIImage *) resizedImageByMagick: (NSString *) spec;
 - (UIImage *) resizedImageByWidth:  (NSUInteger) width;

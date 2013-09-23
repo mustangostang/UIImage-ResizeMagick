@@ -1,14 +1,14 @@
 //
-//  UIImage+Resize.m
-//  
+//  UIImage+ResizeMagick.m
+//
 //
 //  Created by Vlad Andersen on 1/5/13.
 //
 //
 
-#import "UIImage+Resize.h"
+#import "UIImage+ResizeMagick.h"
 
-@implementation UIImage (Resize)
+@implementation UIImage (ResizeMagick)
 
 // width	Width given, height automagically selected to preserve aspect ratio.
 // xheight	Height given, width automagically selected to preserve aspect ratio.
@@ -19,7 +19,7 @@
 
 - (UIImage *) resizedImageByMagick: (NSString *) spec
 {
-    
+
     if([spec hasSuffix:@"!"]) {
         NSString *specWithoutSuffix = [spec substringToIndex: [spec length] - 1];
         NSArray *widthAndHeight = [specWithoutSuffix componentsSeparatedByString: @"x"];
@@ -28,7 +28,7 @@
         UIImage *newImage = [self resizedImageWithMinimumSize: CGSizeMake (width, height)];
         return [newImage drawImageInBounds: CGRectMake (0, 0, width, height)];
     }
-    
+
     if([spec hasSuffix:@"#"]) {
         NSString *specWithoutSuffix = [spec substringToIndex: [spec length] - 1];
         NSArray *widthAndHeight = [specWithoutSuffix componentsSeparatedByString: @"x"];
@@ -37,14 +37,14 @@
         UIImage *newImage = [self resizedImageWithMinimumSize: CGSizeMake (width, height)];
         return [newImage croppedImageWithRect: CGRectMake ((newImage.size.width - width) / 2, (newImage.size.height - height) / 2, width, height)];
     }
-    
+
     if([spec hasSuffix:@"^"]) {
         NSString *specWithoutSuffix = [spec substringToIndex: [spec length] - 1];
         NSArray *widthAndHeight = [specWithoutSuffix componentsSeparatedByString: @"x"];
         return [self resizedImageWithMinimumSize: CGSizeMake ([[widthAndHeight objectAtIndex: 0] longLongValue],
                                                               [[widthAndHeight objectAtIndex: 1] longLongValue])];
     }
-    
+
     NSArray *widthAndHeight = [spec componentsSeparatedByString: @"x"];
     if ([widthAndHeight count] == 1) {
         return [self resizedImageByWidth: [spec longLongValue]];
@@ -62,9 +62,9 @@
         return [self CGImage];
     }
     UIGraphicsBeginImageContext(self.size);
-    
+
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
+
     if (self.imageOrientation == UIImageOrientationRight) {
         CGContextRotateCTM (context, 90 * M_PI/180);
     } else if (self.imageOrientation == UIImageOrientationLeft) {
@@ -72,9 +72,9 @@
     } else if (self.imageOrientation == UIImageOrientationUp) {
         CGContextRotateCTM (context, 180 * M_PI/180);
     }
-    
+
     [self drawAtPoint:CGPointMake(0, 0)];
-    
+
     CGImageRef cgImage = CGBitmapContextCreateImage(context);
     CGContextRelease(context);
     return cgImage;
@@ -86,7 +86,7 @@
     CGImageRef imgRef = [self CGImageWithCorrectOrientation];
     CGFloat original_width  = CGImageGetWidth(imgRef);
     CGFloat original_height = CGImageGetHeight(imgRef);
-    CGFloat ratio = width/original_width;    
+    CGFloat ratio = width/original_width;
     return [self drawImageInBounds: CGRectMake(0, 0, width, round(original_height * ratio))];
 }
 
@@ -131,7 +131,7 @@
 }
 
 - (UIImage*) croppedImageWithRect: (CGRect) rect {
-    
+
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
