@@ -64,11 +64,7 @@
         return [self CGImage];
     }
     if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
-        if ([[UIScreen mainScreen] scale] == 2.0) {
-            UIGraphicsBeginImageContextWithOptions(self.size, YES, 2.0);
-        } else {
-            UIGraphicsBeginImageContext(self.size);
-        }
+        UIGraphicsBeginImageContextWithOptions(self.size, YES, 0);
     } else {
         UIGraphicsBeginImageContext(self.size);
     }
@@ -138,13 +134,9 @@
 - (UIImage *) drawImageInBounds: (CGRect) bounds
 {
     if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
-        if ([[UIScreen mainScreen] scale] == 2.0) {
-            UIGraphicsBeginImageContextWithOptions(bounds.size, YES, 2.0);
-        } else {
-            UIGraphicsBeginImageContext(bounds.size);
-        }
+        UIGraphicsBeginImageContextWithOptions(self.size, YES, 0);
     } else {
-        UIGraphicsBeginImageContext(bounds.size);
+        UIGraphicsBeginImageContext(self.size);
     }
     [self drawInRect: bounds];
     UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -152,16 +144,12 @@
     return resizedImage;
 }
 
-- (UIImage*) croppedImageWithRect: (CGRect) rect {
-    
+- (UIImage*) croppedImageWithRect: (CGRect) rect
+{
     if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
-        if ([[UIScreen mainScreen] scale] == 2.0) {
-            UIGraphicsBeginImageContextWithOptions(rect.size, YES, 2.0);
-        } else {
-            UIGraphicsBeginImageContext(rect.size);
-        }
+        UIGraphicsBeginImageContextWithOptions(self.size, YES, 0);
     } else {
-        UIGraphicsBeginImageContext(rect.size);
+        UIGraphicsBeginImageContext(self.size);
     }
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
