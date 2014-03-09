@@ -22,6 +22,17 @@ Example:
   UIImage* resizedImage = [image resizedImageByMagick: @"320x320#"];
 ```
 
+Installation
+------------
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries in your projects. See the ["Getting Started" guide for more information](https://github.com/AFNetworking/AFNetworking/wiki/Getting-Started-with-AFNetworking).
+
+### Podfile
+
+```ruby
+pod "UIImage-ResizeMagick"
+```
+
 Caveat
 ------
 
