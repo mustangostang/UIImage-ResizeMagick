@@ -51,3 +51,7 @@ If you need some resizing with data known on-the-fly, this category defines the 
   - (UIImage *) resizedImageWithMaximumSize: (CGSize) size;
   - (UIImage *) resizedImageWithMinimumSize: (CGSize) size;
 ```
+
+## Donations, anyone?
+
+If you find UIImage-ResizeMagick useful, I'm accepting Bitcoin donations (who doesn't these days?) at 193bEkLP7zMrNLZm9UdUet4puGD5mQiLai
