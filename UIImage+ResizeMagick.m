@@ -63,7 +63,7 @@
         CGImageRetain([self CGImage]);
         return [self CGImage];
     }
-    UIGraphicsBeginImageContext(self.size);
+    UIGraphicsBeginImageContextWithOptions(self.size, YES, 0.0);
 
     CGContextRef context = UIGraphicsGetCurrentContext();
 
@@ -130,7 +130,7 @@
 
 - (UIImage *) drawImageInBounds: (CGRect) bounds
 {
-    UIGraphicsBeginImageContext(bounds.size);
+    UIGraphicsBeginImageContextWithOptions(bounds.size, YES, 0.0);
     [self drawInRect: bounds];
     UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -139,7 +139,7 @@
 
 - (UIImage*) croppedImageWithRect: (CGRect) rect {
 
-    UIGraphicsBeginImageContext(rect.size);
+	UIGraphicsBeginImageContextWithOptions(rect.size, YES, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
     CGContextClipToRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
