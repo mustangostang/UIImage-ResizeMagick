@@ -56,12 +56,13 @@
                                                           [[widthAndHeight objectAtIndex: 1] longLongValue])];
 }
 
-- (CGImageRef) CGImageWithCorrectOrientation
+- (CGImageRef) CGImageWithCorrectOrientation CF_RETURNS_RETAINED
 {
     if (self.imageOrientation == UIImageOrientationDown) {
         //retaining because caller expects to own the reference
-        CGImageRetain([self CGImage]);
-        return [self CGImage];
+		CGImageRef cgImage = [self CGImage];
+        CGImageRetain(cgImage);
+        return cgImage;
     }
     UIGraphicsBeginImageContext(self.size);
 
