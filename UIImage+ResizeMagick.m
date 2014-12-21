@@ -23,8 +23,8 @@
     if([spec hasSuffix:@"!"]) {
         NSString *specWithoutSuffix = [spec substringToIndex: [spec length] - 1];
         NSArray *widthAndHeight = [specWithoutSuffix componentsSeparatedByString: @"x"];
-        NSUInteger width = (unsigned int)[[widthAndHeight objectAtIndex: 0] longLongValue];
-        NSUInteger height = (unsigned int)[[widthAndHeight objectAtIndex: 1] longLongValue];
+        NSUInteger width = [[widthAndHeight objectAtIndex: 0] unsignedIntegerValue];
+        NSUInteger height = [[widthAndHeight objectAtIndex: 1] unsignedIntegerValue];
         UIImage *newImage = [self resizedImageWithMinimumSize: CGSizeMake (width, height)];
         return [newImage drawImageInBounds: CGRectMake (0, 0, width, height)];
     }
@@ -32,8 +32,8 @@
     if([spec hasSuffix:@"#"]) {
         NSString *specWithoutSuffix = [spec substringToIndex: [spec length] - 1];
         NSArray *widthAndHeight = [specWithoutSuffix componentsSeparatedByString: @"x"];
-        NSUInteger width = (unsigned int)[[widthAndHeight objectAtIndex: 0] longLongValue];
-        NSUInteger height = (unsigned int)[[widthAndHeight objectAtIndex: 1] longLongValue];
+        NSUInteger width = [[widthAndHeight objectAtIndex: 0] unsignedIntegerValue];
+        NSUInteger height = [[widthAndHeight objectAtIndex: 1] unsignedIntegerValue];
         UIImage *newImage = [self resizedImageWithMinimumSize: CGSizeMake (width, height)];
         return [newImage croppedImageWithRect: CGRectMake ((newImage.size.width - width) / 2, (newImage.size.height - height) / 2, width, height)];
     }
@@ -47,10 +47,10 @@
 
     NSArray *widthAndHeight = [spec componentsSeparatedByString: @"x"];
     if ([widthAndHeight count] == 1) {
-        return [self resizedImageByWidth:(unsigned int)[spec longLongValue]];
+        return [self resizedImageByWidth: [spec integerValue]];
     }
     if ([[widthAndHeight objectAtIndex: 0] isEqualToString: @""]) {
-        return [self resizedImageByHeight:(unsigned int)[[widthAndHeight objectAtIndex: 1] longLongValue]];
+        return [self resizedImageByHeight: [[widthAndHeight objectAtIndex: 1] unsignedIntegerValue]];
     }
     return [self resizedImageWithMaximumSize: CGSizeMake ([[widthAndHeight objectAtIndex: 0] longLongValue],
                                                           [[widthAndHeight objectAtIndex: 1] longLongValue])];
