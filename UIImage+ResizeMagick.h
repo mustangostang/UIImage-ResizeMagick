@@ -12,6 +12,9 @@
 
 @interface UIImage (ResizeMagick)
 
++ (void) setInterpolationQuality:(CGInterpolationQuality) quality;
++ (CGInterpolationQuality) interpolationQuality;
+
 - (UIImage *) resizedImageByMagick: (NSString *) spec;
 - (UIImage *) resizedImageByWidth:  (NSUInteger) width;
 - (UIImage *) resizedImageByHeight: (NSUInteger) height;
