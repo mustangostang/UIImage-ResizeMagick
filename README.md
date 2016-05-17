@@ -52,6 +52,18 @@ If you need some resizing with data known on-the-fly, this category defines the 
   - (UIImage *) resizedImageWithMinimumSize: (CGSize) size;
 ```
 
+Adjust interpolation quality:
+-----------------------------
+For smooth images try following methods:
+
+```objective-c
++ (void) setInterpolationQuality: (CGInterpolationQuality) quality;
++ (CGInterpolationQuality) interpolationQuality;
+```
+
+More information about this option here:
+https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CGContext/#//apple_ref/c/tdef/CGInterpolationQuality
+
 ## Donations, anyone?
 
 If you find UIImage-ResizeMagick useful, I'm accepting Bitcoin donations (who doesn't these days?) at 193bEkLP7zMrNLZm9UdUet4puGD5mQiLai

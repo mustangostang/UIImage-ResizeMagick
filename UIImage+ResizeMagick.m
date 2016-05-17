@@ -8,6 +8,8 @@
 
 #import "UIImage+ResizeMagick.h"
 
+static CGInterpolationQuality _interpolationQuality = kCGInterpolationNone;
+
 @implementation UIImage (ResizeMagick)
 
 // width	Width given, height automagically selected to preserve aspect ratio.
@@ -16,6 +18,14 @@
 // widthxheight^	Minimum values of width and height given, aspect ratio preserved.
 // widthxheight!	Exact dimensions, no aspect ratio preserved.
 // widthxheight#	Crop to this exact dimensions.
+
++(void)setInterpolationQuality:(CGInterpolationQuality)quality {
+    _interpolationQuality = quality;
+}
+
++(CGInterpolationQuality)interpolationQuality {
+    return _interpolationQuality;
+}
 
 - (UIImage *) resizedImageByMagick: (NSString *) spec
 {
@@ -67,6 +77,7 @@
     UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0);
 
     CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetInterpolationQuality(context, _interpolationQuality);
 
     if (self.imageOrientation == UIImageOrientationRight) {
         CGContextRotateCTM (context, 90 * M_PI/180);
@@ -132,6 +143,8 @@
 - (UIImage *) drawImageInBounds: (CGRect) bounds
 {
     UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetInterpolationQuality(context, _interpolationQuality);
     [self drawInRect: bounds];
     UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -142,6 +155,7 @@
 
 	UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetInterpolationQuality(context, _interpolationQuality);
     CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, self.size.width, self.size.height);
     CGContextClipToRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
     [self drawInRect:drawRect];
